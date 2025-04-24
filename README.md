@@ -1,0 +1,2 @@
+# mindpick
+mini_project
