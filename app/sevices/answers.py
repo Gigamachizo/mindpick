@@ -1,1 +1,0 @@
-# answers 테이블 관련 orm 함수
