@@ -29,12 +29,12 @@ class User(CommonModel):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     __table_args__ = (
-        db.CheckConstraint("age IN ('teen', 'twenty', 'thirty', 'fourty', 'fifty')", name="check_age"),
+        db.CheckConstraint("age IN ('teen', 'twenty', 'thirty', 'forty', 'fifty')", name="check_age"),
         db.CheckConstraint("gender IN ('male', 'female')", name="check_gender"),
     )
 
     def __init__(self, name, age, gender, email):
-        allowed_ages = {"teen", "twenty", "thirty", "fourty", "fifty"}
+        allowed_ages = {"teen", "twenty", "thirty", "forty", "fifty"}
         allowed_genders = {"male", "female"}
 
         if User.query.filter_by(email=email).first():
@@ -75,10 +75,10 @@ class Image(CommonModel):
     def __init__(self, url, image_type):
         allowed_type = {"main", "sub"}
         if image_type not in allowed_type:
-            abort(400, f"Invalid type: {type}. Allowed values: {allowed_type}")
+            abort(400, f"Invalid type: {image_type}. Allowed values: {allowed_type}")
 
         self.url = url
-        self.type = type
+        self.type = image_type
 
     questions = db.relationship("Question", back_populates="image")
 
