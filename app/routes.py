@@ -1,56 +1,52 @@
 # 뷰 및 라우트 정의
-from flask import Flask, jsonify, request
+from flask import Blueprint, request, jsonify
+from app.services.users import create_user
+from app.services.questions import create_question, get_all_questions
+from app.services.answers import create_answer
+from app.services.choices import create_choice
+from app.services.images import create_image, get_all_images
 
-app = Flask(__name__)
+routes_bp = Blueprint('routes', __name__)
 
+users = []
+questions = []
+choices = []
+images = []
+user_answers = []
+image_id_counter = 1
 
-
-
-@app.route('/')
+# 기본 연결 획인
+@routes_bp.route('/')
 def service():
     return jsonify({
         "message": "Success Connect"
     })
 
-
-@app.route('/image/main')
+# 메인 이미지 가져오기
+@routes_bp.route('/image/main')
 def image_main():
     return jsonify({"image":""})
 
 
-users = []
-@app.route('/signup', methods=['POST'])
+# 회원가입
+@routes_bp.route('/signup', methods=['POST'])
 def signup():
 
-    data = request.get_json()
-    name = data.get('name')
-    email = data.get('email')
-    age = data.get('age')
-    gender = data.get('gender')
-
-    for user in users:
-        if user['email'] == email:
-            return jsonify({"message":"이미 존재하는 계정 입니다."}),
-
-    new_user = {
-        "name": name,
-        "email": email,
-        "age": age,
-        "gender": gender
-    }
-    users.append(new_user)
-
-    response = {
-        "message": f"{name}님 회원가입을 축하합니다",
-        "user_id": 1
-    }
+    user_data = request.get_json()
+    result = create_user(user_data)
     
-    return jsonify(response),
+    if 'error' in result:
+        return jsonify(result), 400
 
-@app.route('/questions/<int:question_id>')
-def question_id():
+    # 성공한 경우
+    return jsonify(result), 201
+
+
+# 질문 가져오기
+@routes_bp.route('/questions/<int:question_id>')
+def question_id(question_id):
     question = {
-        "id": 1,
+        "id": question_id,
         "title": "1번 질문입니다",
         "image": "",
         "choices": [
@@ -61,49 +57,45 @@ def question_id():
 
     return jsonify(question)
 
-@app.route('/questions/count')
+
+#질문 개수 확인
+@routes_bp.route('/questions/count')
 def question_count():
-    total = len(questions)
+    all_questions = get_all_questions()
     
-    return jsonify({'total': total})
+    return jsonify({'total': len(all_questions)})
 
-
-@app.route('/choice/<int:question_id>')
+# 선택지 가져오기
+@routes_bp.route('/choice/<int:question_id>')
 def choice():
-    choice = {
+    choice_data = {
         "choices": [
-        { "id": 1, "content": "옵션 1", "is_active": true },
-        { "id": 2, "content": "옵션 2", "is_active": true }
+        { "id": 1, "content": "옵션 1", "is_active": True },
+        { "id": 2, "content": "옵션 2", "is_active": True }
         ]
     }
-    return jsonify(choice)
+    return jsonify(choice_data)
 
-user_answers = []
-@app.route('/submit', methods=['POST'])
+# 답변 제출하기
+@routes_bp.route('/submit', methods=['POST'])
 def submit():
     data = request.get_json()
-    user_id = data.get('user_id')
-    answers = data.get('answers')
+    result = create_answer(data)
 
-    user_answers.append({
-        "user_id": user_id,
-        "answers": answers
-    })
+    return jsonify(result)
 
-    return jsonify({"message": f"user: {user_id}'s answer  Create"})
-
-images = []
-image_id_counter = 1
-@app.route('/image', methods=['POST'])
+# 이미지 생성
+@routes_bp.route('/image', methods=['POST'])
 def add_image():
     data = request.get_json()
-    url = data.get('url')
+    url = create_image(data)
 
     new_image = {
         "id": image_id_counter,
         "url": url
     }
     images.append(new_image)
+    images = get_all_images()
 
     response = {
         "message": f"ID: {image_id_counter} Image Success Create"
@@ -113,11 +105,11 @@ def add_image():
 
     return jsonify(response)
 
-questions = []
-@app.route('/question', methods=['POST'])
+# 질문 생성
+@routes_bp.route('/question', methods=['POST'])
 def add_question():
     data = request.get_json()
-    question_text = data.get('question')
+    question_text = create_question(data)
 
     new_questions = {
         "question": question_text
@@ -130,11 +122,11 @@ def add_question():
 
     return jsonify(response)
 
-choices = []
-@app.route('/choice', methods=['POST'])
+# 선택지 생성
+@routes_bp.route('/choice', methods=['POST'])
 def add_choice():
     data = request.get_json()
-    choice_num = data.get('choice')
+    choice_num = create_choice(data)
 
     new_choice = {
         'choice': choice_num
@@ -147,5 +139,7 @@ def add_choice():
 
     return jsonify(response)
 
-if __name__ == "__main--":
-    app.run(debug=True)
+
+def register_blueprints(app):
+    from . import routes_bp
+    app.register_blueprint(routes_bp)
