@@ -1,4 +1,5 @@
 # Flask 및 데이터베이스 설정 파일
+from flask_smorest import Api
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()

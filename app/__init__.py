@@ -4,6 +4,8 @@ from config import db
 from flask_migrate import Migrate
 from app.routes import main_blp, user_blp
 
+import app.models
+
 # Migrate 객체를 전역 변수로 선언
 migrate = Migrate()
 

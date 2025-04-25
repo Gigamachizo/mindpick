@@ -1,6 +1,6 @@
 # # 뷰 및 라우트 정의
 from flask import request, jsonify, Blueprint
-from app.sevices.users import create_user
+from app.services.users import create_user
 
 # Blueprint 생성
 main_blp = Blueprint('Main', __name__, url_prefix='/main')
@@ -17,23 +17,15 @@ def index():
 # 회원가입(POST)
 def post():
     print("라우트에 요청 도착")
-    user_data = request.get_json()
-    print(user_data)
-
-    try:
-         #create_user 함수 호출하여 새 사용자 생성
-        new = create_user(
-                name = user_data['name'], 
-                age = user_data['age'], 
-                gender = user_data['gender'], 
-                email = user_data['email']
-        )
-        #새 사용자 정보 반환
-        return jsonify({
-            "message": f"{new.name}님 회원가입을 축하합니다",
-            "user_id" : new.id
-        })
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+    data = request.get_json()  # 클라이언트에서 보낸 JSON 데이터
     
+    # 사용자 생성 함수 호출
+    users = create_user(data)
+    
+    # 에러가 발생한 경우, 400 상태 코드와 함께 반환
+    if 'error' in users:
+        return jsonify(users), 400  # 에러 응답을 반환
+    
+    # 성공적으로 생성된 사용자 정보 반환
+    return jsonify(users), 201  # 성공 시 201 상태 코드와 함께 반환
 
