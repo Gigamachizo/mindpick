@@ -1,7 +1,7 @@
 # 뷰 및 라우트 정의
 from flask import Blueprint, request, jsonify
 from app.services.users import create_user
-from app.services.questions import create_question, get_all_questions
+#from app.services.questions import create_question, get_all_questions
 from app.services.answers import create_answer, get_answer_id
 from app.services.choices import create_choice, choices_question_id
 from app.services.images import create_image, get_main_image
@@ -118,17 +118,8 @@ def add_question():
 def add_choice():
     data = request.get_json()
     choice_num = create_choice(data)
-
-    new_choice = {
-        'choice': choice_num
-    }
-    choices.append(new_choice)
-
-    response = {
-        "message": "Content: 새로운 선택지 choice Success Create"
-    }
-
-    return jsonify(response)
+    print(choice_num)
+    return jsonify(choice_num)
 
 
 @routes_bp.route('/answer/<int:answer_id>', methods=['GET'])

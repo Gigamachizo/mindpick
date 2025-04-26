@@ -20,7 +20,7 @@ def create_choice(data: dict) -> dict:
         db.session.commit()
 
         return {
-            "message": "Content: 새로운 선택지 choice Success Create"
+            "message": f"Content: {new_choice.content} choice Success Create"
         }
     
     except IntegrityError:
