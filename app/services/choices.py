@@ -29,7 +29,7 @@ def create_choice(data: dict) -> dict:
 
 
 #GET <id>
-def choices_question_id(question_id: int) -> dict:
+def get_choices_question_id(question_id: int) -> dict:
     choices = Choices.query.filter_by(question_id=question_id).all()
     return {
         "choices": [

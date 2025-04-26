@@ -1,7 +1,8 @@
 # images 테이블 관련 orm 함수
 from flask import abort
-from models import db, Image  # models는 여러분이 모델 정의한 파일 경로에 따라 조정하세요
+from app.models import db, Image  # models는 여러분이 모델 정의한 파일 경로에 따라 조정하세요
 
+#POST
 def create_image(url: str, image_type: str) -> Image:
     allowed_type = {"main", "sub"}
 

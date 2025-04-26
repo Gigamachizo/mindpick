@@ -1,6 +1,6 @@
 # questions 테이블 관련 orm 함수
 from flask import abort 
-from models import Question, Choices, db  # 모델 클래스 직접 import
+from app.models import Question, Choices, db  # 모델 클래스 직접 import
 
 # 특정 질문과 선택지 조회
 def get_question_detail(question_id):

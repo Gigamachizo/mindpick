@@ -1,10 +1,10 @@
 # 뷰 및 라우트 정의
 from flask import Blueprint, request, jsonify
 from app.services.users import create_user
-#from app.services.questions import create_question, get_all_questions
+from app.services.questions import create_question, get_question_detail, get_question_count
 from app.services.answers import create_answer, get_answer_id
-from app.services.choices import create_choice, choices_question_id
-from app.services.images import create_image, get_main_image
+from app.services.choices import create_choice, get_choices_question_id
+from app.services.images import create_image
 
 
 routes_bp = Blueprint('routes', __name__)
@@ -20,7 +20,7 @@ def service():
 
 # 메인 이미지 가져오기
 @routes_bp.route('/image/main')
-def image_main():
+def get_main_image():
     return jsonify({"image":""})
 
 
@@ -37,35 +37,18 @@ def signup():
     # 성공한 경우
     return jsonify(result), 201
 
-
 # 질문 가져오기
 @routes_bp.route('/questions/<int:question_id>')
-def question_id(question_id):
-    question = {
-        "id": question_id,
-        "title": "1번 질문입니다",
-        "image": "",
-        "choices": [
-            { "id": 1, "content": "옵션 1", "is_active": True },
-            { "id": 2, "content": "옵션 2", "is_active": True }
-        ]
-    }
-
-    return jsonify(question)
-
+def get_question_detail(question_id):
+    return get_question_detail(question_id)
 
 #질문 개수 확인
 @routes_bp.route('/questions/count')
 def question_count():
-    all_questions = get_main_image()
+    all_questions = get_question_count()
     
     return jsonify({'total': len(all_questions)})
 
-# 선택지 가져오기
-# 질문에 대한 답을 하기 위한 라우터
-@routes_bp.route('/choice/<int:question_id>')
-def choice(question_id):
-    return choices_question_id(question_id)
 
 # 답변 제출하기
 @routes_bp.route('/submit', methods=['POST'])
@@ -102,16 +85,13 @@ def add_question():
     data = request.get_json()
     question_text = create_question(data)
 
-    new_questions = {
-        "question": question_text
-    }
-    questions.append(new_questions)
+    return jsonify(question_text)
 
-    response = {
-        "message": "Title: 새로운 질문 question Success Create"
-    }
-
-    return jsonify(response)
+# 선택지 가져오기
+# 질문에 대한 답을 하기 위한 라우터
+@routes_bp.route('/choice/<int:question_id>')
+def choice(question_id):
+    return get_choices_question_id(question_id)
 
 # 선택지 생성
 @routes_bp.route('/choice', methods=['POST'])
