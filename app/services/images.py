@@ -4,7 +4,7 @@ from app.models import db, Image  # models는 여러분이 모델 정의한 파�
 
 # 메인 이미지 가져오기
 def get_main_image() -> dict:
-    img = Image.query.filter_by(image_type="main").first()
+    img = Image.query.filter_by(type="main").first()
     if not img:
         abort(404, "메인 이미지가 없습니다.")
     return {
