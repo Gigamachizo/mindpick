@@ -2,7 +2,7 @@
 from flask import Flask
 from config import db
 from flask_migrate import Migrate
-from app.routes import main_blp, user_blp
+from app.routes import routes_bp
 
 import app.models
 
@@ -23,8 +23,8 @@ def create_app():
     migrate.init_app(application, db)
 
     # 블루 프린트 등록
-    application.register_blueprint(main_blp)
-    application.register_blueprint(user_blp)
+    application.register_blueprint(routes_bp)
+
 
     # 지역변수 리턴
     return application
