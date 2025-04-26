@@ -102,9 +102,6 @@ class Question(CommonModel):
 
     image = db.relationship("Image", back_populates="questions")
 
-    # 관계 설정 추가: 하나의 Question은 여러 개의 Choices를 가질 수 있음
-    choices = db.relationship("Choices", backref="question", lazy="dynamic")
-
     def to_dict(self):
         return {
             "id": self.id,

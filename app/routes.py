@@ -1,7 +1,7 @@
 # 뷰 및 라우트 정의
 from flask import Blueprint, request, jsonify
 from app.services.users import create_user
-# from app.services.questions import create_question, get_all_questions
+from app.services.questions import create_question, get_all_questions
 from app.services.answers import create_answer, get_answer_id
 from app.services.choices import create_choice, choices_question_id
 from app.services.images import create_image, get_main_image
@@ -9,11 +9,6 @@ from app.services.images import create_image, get_main_image
 
 routes_bp = Blueprint('routes', __name__)
 
-users = []
-questions = []
-
-images = []
-user_answers = []
 image_id_counter = 1
 
 # 기본 연결 획인
