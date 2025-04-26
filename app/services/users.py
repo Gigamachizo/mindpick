@@ -1,84 +1,39 @@
 # users 테이블 관련 orm 함수
+from sqlalchemy.exc import IntegrityError
+from flask import request, jsonify, Blueprint
+from app.models import User
+from config import db
 
-from flask import abort, session
-from models import db, User
-
-
-# 1. 회원가입
-def create_user(data):
-    name = data.get("name")
-    age = data.get("age")
-    gender = data.get("gender")
-    email = data.get("email")
-
-    if not all([name, age, gender, email]):
-        abort(400, description="필수 입력값(name, age, gender, email)이 누락되었습니다.")
-
-    # 이메일 중복 체크
-    if User.query.filter_by(email=email).first():
-        abort(409, description="이미 등록된 이메일입니다.")
-
+# 회원가입(POST)
+def create_user(data: dict) -> dict:
+    print("딕셔너리 들고 도착")
     try:
-        user = User(name=name, age=age, gender=gender, email=email)
-        db.session.add(user)
+        # 새로 생성된 사용자 객체를 담는 변수
+        new_user = User(
+            name=data['name'],
+            age=data['age'],
+            gender=data['gender'],
+            email=data['email']
+        )
+        print(new_user)
+        
+        
+        # DB에 새 사용자 객체 추가 및 커밋
+        db.session.add(new_user)
         db.session.commit()
-        return user.to_dict()
-    except Exception as e:
-        db.session.rollback()
-        abort(500, description=f"사용자 생성 중 오류가 발생했습니다: {str(e)}")
 
-
-# 2. 로그인 (간단한 세션 기반)
-def login_user(data):
-    email = data.get("email")
-
-    if not email:
-        abort(400, description="이메일이 필요합니다.")
-
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        abort(404, description="해당 이메일의 사용자를 찾을 수 없습니다.")
-
-    # 로그인 성공 → 세션에 저장
-    session['user_id'] = user.id
-    return {"message": "로그인 성공", "user": user.to_dict()}
-
-
-# 3. 프로필 조회
-def get_user_profile(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        abort(404, description="사용자를 찾을 수 없습니다.")
-    return user.to_dict()
-
-
-# 4. 사용자 정보 수정
-def update_user(user_id, data):
-    user = User.query.get(user_id)
-    if not user:
-        abort(404, description="사용자를 찾을 수 없습니다.")
-
-    user.name = data.get("name", user.name)
-    user.age = data.get("age", user.age)
-    user.gender = data.get("gender", user.gender)
-    user.email = data.get("email", user.email)
-
-    try:
-        db.session.commit()
-        return user.to_dict()
-    except Exception as e:
-        db.session.rollback()
-        abort(500, description=f"수정 중 오류가 발생했습니다: {str(e)}")
-
-
-# 5. 사용자 삭제
-def delete_user(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        abort(404, description="사용자를 찾을 수 없습니다.")
-
-    db.session.delete(user)
-    db.session.commit()
-    session.pop('user_id', None)  # 세션도 제거
-
-    return {"message": f"사용자 ID {user_id}가 삭제되었습니다."}
+        print(new_user)
+        
+        # 성공적인 사용자 생성 후 반환할 메시지
+        return {
+            "message": f"{new_user.name}님 회원가입을 축하합니다",
+            "user_id": new_user.id
+        }
+    
+    except IntegrityError as e:
+        # 중복된 이메일 오류 등의 예외 처리
+        db.session.rollback()  # 롤백
+        print(f"Error: {str(e)}")
+        return {
+            "error": "이미 존재하는 이메일입니다."
+        }

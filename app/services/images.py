@@ -29,4 +29,3 @@ def delete_image(image_id: int) -> None:
     image = get_image_by_id(image_id)
     db.session.delete(image)
     db.session.commit()
-

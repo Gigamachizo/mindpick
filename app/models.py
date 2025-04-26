@@ -26,7 +26,7 @@ class User(CommonModel):
     name = db.Column(db.String(10), nullable=False)
     age = db.Column(db.String(10), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False) 
 
     __table_args__ = (
         db.CheckConstraint("age IN ('teen', 'twenty', 'thirty', 'fourty', 'fifty')", name="check_age"),
