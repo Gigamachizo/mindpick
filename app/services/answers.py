@@ -1,6 +1,5 @@
 # answers 테이블 관련 orm 함수
-from sqlalchemy.exc import IntegrityError
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify
 from app.models import Answer
 from config import db
 

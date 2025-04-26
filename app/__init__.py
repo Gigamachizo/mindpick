@@ -25,6 +25,4 @@ def create_app():
     # 블루 프린트 등록
     application.register_blueprint(routes_bp)
 
-
-    # 지역변수 리턴
     return application

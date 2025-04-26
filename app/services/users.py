@@ -37,8 +37,3 @@ def create_user(data: dict) -> dict:
         return {
             "error": "이미 존재하는 이메일입니다."
         }
-
-
-    
-
- 
