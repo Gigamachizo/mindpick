@@ -27,7 +27,7 @@ def get_question_count():
 def create_question(d):
         create_q = Question(
                     title = d["title"],
-                    is_active = d.get("is_actibe"),
+                    is_active = d.get("is_active"),
                     sqe =d["sqe"],
                     image_id = d["image_id"],
 
