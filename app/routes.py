@@ -11,20 +11,20 @@ routes_bp = Blueprint('routes', __name__)
 
 image_id_counter = 1
 
-# 기본 연결 획인
+# 1.기본 연결 획인
 @routes_bp.route('/')
 def service():
     return jsonify({
         "message": "Success Connect"
     })
 
-# 메인 이미지 가져오기
+# 2.메인 이미지 가져오기
 @routes_bp.route('/image/main')
 def get_main_image():
     return jsonify({"image":""})
 
 
-# 회원가입
+# 3.회원가입
 @routes_bp.route('/signup', methods=['POST'])
 def signup():
 
@@ -37,20 +37,24 @@ def signup():
     # 성공한 경우
     return jsonify(result), 201
 
-# 질문 가져오기
+# 4-1.질문 가져오기
 @routes_bp.route('/questions/<int:question_id>')
 def get_question_detail(question_id):
     return get_question_detail(question_id)
 
-#질문 개수 확인
+# 4-2.질문 개수 확인
 @routes_bp.route('/questions/count')
 def question_count():
     all_questions = get_question_count()
     
     return jsonify({'total': len(all_questions)})
 
+# 5. 선택지 가져오기
+@routes_bp.route('/choice/<int:question_id>')
+def choice(question_id):
+    return get_choices_question_id(question_id)
 
-# 답변 제출하기
+# 6. 답변 제출하기
 @routes_bp.route('/submit', methods=['POST'])
 def submit():
     data = request.get_json()
@@ -58,7 +62,7 @@ def submit():
 
     return jsonify(result)
 
-# 이미지 생성
+# 7-1. 이미지 생성
 @routes_bp.route('/image', methods=['POST'])
 def add_image():
     data = request.get_json()
@@ -79,7 +83,7 @@ def add_image():
 
     return jsonify(response)
 
-# 질문 생성
+# 7-2. 질문 생성
 @routes_bp.route('/question', methods=['POST'])
 def add_question():
     data = request.get_json()
@@ -87,13 +91,7 @@ def add_question():
 
     return jsonify(question_text)
 
-# 선택지 가져오기
-# 질문에 대한 답을 하기 위한 라우터
-@routes_bp.route('/choice/<int:question_id>')
-def choice(question_id):
-    return get_choices_question_id(question_id)
-
-# 선택지 생성
+# 7-3. 선택지 생성
 @routes_bp.route('/choice', methods=['POST'])
 def add_choice():
     data = request.get_json()
