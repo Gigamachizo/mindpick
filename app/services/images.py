@@ -13,12 +13,21 @@ def get_main_image() -> dict:
 
 # 이미지 생성
 def create_image(data: dict) -> dict:
-    try:
-        img = Image(url=data["url"], image_type=data["type"])
+        print("값이 들어왔니")
+    #try:
+        # url = data["url"]
+        # image_type = data["image_type"]  # 딕셔너리 키: "type"
+
+        # img = Image(url=url, image_type=image_type)  # image_type을 명확하게 넘겨줌
+
+
+        #img = Image(url=data["url"], type=data["type"])
+        img = Image(url=data["url"], image_type=data["image_type"])
+        print()
         db.session.add(img)
         db.session.commit()
         return {
   "message": f"ID: {img.id} Image Success Create"
 }
-    except Exception as e:
-        abort(400, f"이미지 생성 실패: {e}")
+    # except Exception as e:
+    #     abort(400, f"이미지 생성 실패: {e}")
