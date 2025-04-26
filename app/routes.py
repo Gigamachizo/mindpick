@@ -19,22 +19,17 @@ def service():
     })
 
 # 2.메인 이미지 가져오기
-@routes_bp.route('/image/main')
+@routes_bp.route('/image/main', methods=['GET'])
 def get_main_image():
-    return jsonify({"image":""})
+    main_img = get_main_image()
+    return jsonify(main_img)
 
 
 # 3.회원가입
 @routes_bp.route('/signup', methods=['POST'])
-def signup():
-
+def create_user():
     user_data = request.get_json()
     result = create_user(user_data)
-    
-    if 'error' in result:
-        return jsonify(result), 400
-
-    # 성공한 경우
     return jsonify(result), 201
 
 # 4-1.질문 가져오기
