@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify
 from app.services.users import create_user
 from app.services.questions import create_question, get_question_detail, get_question_count
-from app.services.answers import create_answer, get_answer_id
+from app.services.answers import create_answer
 from app.services.choices import create_choice, get_choices_question_id
 from app.services.images import create_image, get_main_image
 
