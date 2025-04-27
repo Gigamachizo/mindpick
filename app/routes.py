@@ -82,6 +82,6 @@ def add_choice():
     return jsonify(choice_num)
 
 # (보류)
-@routes_bp.route('/answer/<int:answer_id>', methods=['GET'])
-def get_answer(answer_id):
-    return jsonify(get_answer_id(answer_id))
+# @routes_bp.route('/answer/<int:answer_id>', methods=['GET'])
+# def get_answer(answer_id):
+#     return jsonify(get_answer_id(answer_id))
