@@ -1,6 +1,5 @@
 # 개발환경에서 테스트 하는 실행 파일
 from app import create_app 
-from config import db
 
 # create_app() 함수 호출
 application = create_app()
