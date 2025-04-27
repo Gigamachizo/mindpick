@@ -4,19 +4,19 @@ from app.models import Answer
 from config import db
 
 # 사용자 답변 id (get)
-def get_answer_id(answer_id): 
-    answer = Answer.query.get(answer_id)
+# def get_answer_id(answer_id): 
+#     answer = Answer.query.filter_by(id=answer_id).first()
 
-    if not answer:
-        return {"error": "해당 ID의 답변이 존재하지 않습니다."}, 404
+#     if not answer:
+#         return {"error": "해당 ID의 답변이 존재하지 않습니다."}, 404
 
-    answers = [{
-    "id": answer.id,
-    "user_id": answer.user_id,
-    "choice_id": answer.choice_id
-}]
+#     answers = [{
+#     "id": answer.id,
+#     "user_id": answer.user_id,
+#     "choice_id": answer.choice_id
+# }]
 
-    return {"answers": answers}
+#     return {"answers": answers}
 
 
 
