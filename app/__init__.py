@@ -3,6 +3,7 @@ from flask import Flask
 from config import db
 from flask_migrate import Migrate
 from app.routes import routes_bp
+from app.stats_routes import stats_routes
 
 import app.models
 
@@ -24,5 +25,6 @@ def create_app():
 
     # 블루 프린트 등록
     application.register_blueprint(routes_bp)
+    application.register_blueprint(stats_routes)
 
     return application
