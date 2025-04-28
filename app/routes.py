@@ -41,9 +41,8 @@ def get_question(question_id):
 # 4-2.질문 개수 확인
 @routes_bp.route('/questions/count')
 def question_count():
-    all_questions = get_question_count()
-    
-    return jsonify({'total': len(all_questions)})
+    count_info = get_question_count()
+    return jsonify(count_info)
 
 # 5. 선택지 가져오기
 @routes_bp.route('/choice/<int:question_id>')
