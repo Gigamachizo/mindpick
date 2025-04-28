@@ -35,7 +35,8 @@ def signup():
 # 4-1.질문 가져오기
 @routes_bp.route('/questions/<int:question_id>')
 def get_question(question_id):
-    return get_question_detail(question_id)
+    question_detail = get_question_detail(question_id)
+    return jsonify(question_detail)
 
 # 4-2.질문 개수 확인
 @routes_bp.route('/questions/count')
@@ -47,7 +48,8 @@ def question_count():
 # 5. 선택지 가져오기
 @routes_bp.route('/choice/<int:question_id>')
 def choice(question_id):
-    return get_choices_question_id(question_id)
+    choices = get_choices_question_id(question_id)
+    return jsonify(choices)
 
 # 6. 답변 제출하기
 @routes_bp.route('/submit', methods=['POST'])
@@ -78,7 +80,6 @@ def add_question():
 def add_choice():
     data = request.get_json()
     choice_num = create_choice(data)
-    print(choice_num)
     return jsonify(choice_num)
 
 # (보류)
