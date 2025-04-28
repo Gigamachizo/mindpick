@@ -20,6 +20,7 @@ def get_question_detail(question_id):
 # 질문 수 조회
 def get_question_count():
     total = Question.query.count()
+    print(total)
     return {
         "total": total
     }
